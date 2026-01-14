@@ -8,31 +8,51 @@
 | 5            | 11:20 – 12:00 | Backend integration & API setup (Whisper, ElevenLabs TTS)    | 40 min     | Audio & transcript working        |
 | 6            | 12:00 – 12:30 | Testing & bug fixes (Whisper, ElevenLabs, MediaPipe)         | 30 min     | Modules tested & stable           |
 
+🚀 Project Title
+
 ♿ AI for Accessibility – Assistive Tools for Inclusive Education
-📌 Problem Statement
+
+🔍 Problem Statement
 
 Students with disabilities—visual, auditory, and cognitive impairments—often struggle with mainstream educational tools. Most learning platforms and exam systems are not adaptive, making it difficult for these students to learn and demonstrate their knowledge independently.
 
-🎯 Hackathon Challenge
-
-Develop AI-powered assistive tools that improve accessibility and inclusivity in education, enabling equal learning opportunities for all students.
-
-💡 Our Solution
+💡 Proposed Solution
 
 We built an AI-based Accessibility Platform with three assistive modules designed to support different disabilities:
 
-Voice-to-Text for Exams
+Voice-to-Text for Exams – Converts spoken answers into text in real-time, providing a secure, exam-friendly environment and reducing dependency on scribes.
 
-Adaptive Learning Content for Dyslexia (powered by ElevenLabs)
+Adaptive Learning Content for Dyslexia – Simplifies complex text, uses dyslexia-friendly layouts, and provides Text-to-Speech with word-by-word highlighting for better comprehension.
 
-Sign-Language Recognition
+Sign-Language Recognition – Converts sign language gestures into readable text, enabling real-time classroom communication and expanding to regional sign languages.
 
-🛠 Features
+System Architecture:
+User Input (Voice / Text / Sign) → AI Processing Layer → Accessible Output (Text / Speech / Simplified Content)
+
+🛠️ Tech Stack
+
+Frontend: HTML, JavaScript
+
+Backend / AI Processing: Python
+
+APIs / Services: ElevenLabs Text-to-Speech API, MediaPipe, OpenCV
+
+🤖 AI Tools Used
+
+Automatic Speech Recognition (ASR) – Real-time voice-to-text conversion
+
+Natural Language Processing (NLP) – Simplifying text for dyslexia-friendly content
+
+ElevenLabs Text-to-Speech API – Human-like audio for reading content aloud
+
+Computer Vision (MediaPipe / OpenCV) – Real-time sign-language recognition
+
+Deep Learning (CNN / LSTM) – Gesture recognition
+
+⭐ Key Features
 🔊 1. Voice-to-Text for Exams
 
-Supports: Visually impaired students, students with motor disabilities, dysgraphia
-
-Converts spoken answers into text during exams
+Supports visually impaired students, students with motor disabilities, dysgraphia
 
 Real-time speech recognition
 
@@ -40,61 +60,23 @@ Secure exam-friendly environment
 
 Reduces dependency on scribes
 
-Technologies:
-
-Automatic Speech Recognition (ASR)
-
-Python-based speech models
-
 📖 2. Adaptive Content for Dyslexia
 
-Supports: Students with dyslexia and cognitive learning difficulties
+Simplifies complex educational text
 
-Simplifies complex educational text using AI
-
-Dyslexia-friendly fonts and layouts
+Dyslexia-friendly layouts
 
 Adjustable reading speed and difficulty
 
-Text-to-Speech powered by ElevenLabs for natural, human-like audio
-
-Word-by-word audio highlighting for better comprehension
-
-Technologies:
-
-Natural Language Processing (NLP)
-
-Readability analysis
-
-ElevenLabs Text-to-Speech API
+Word-by-word Text-to-Speech highlighting
 
 🤟 3. Sign-Language Recognition
-
-Supports: Hearing-impaired students
 
 Converts sign language gestures into readable text
 
 Real-time hand and gesture tracking
 
-Enables easier classroom communication
-
 Expandable to regional sign languages
-
-Technologies:
-
-Computer Vision
-
-MediaPipe, OpenCV
-
-Deep Learning (CNN / LSTM)
-
-🧩 System Architecture
-User Input (Voice / Text / Sign)
-            ↓
-      AI Processing Layer
-            ↓
-Accessible Output
-(Text / Speech / Simplified Content)
 
 🌍 Impact
 
@@ -106,7 +88,7 @@ Reduces accessibility barriers in exams
 
 Supports differently-abled students with dignity
 
-🚀 Future Scope
+🔮 Future Scope
 
 Multilingual voice support using ElevenLabs
 
@@ -129,3 +111,5 @@ Strong fit for education and inclusion-focused hackathons
 👨‍💻 Team & Acknowledgements
 
 Developed as part of an AI for Accessibility Hackathon Challenge, leveraging modern AI tools including ElevenLabs to create inclusive learning experiences.
+
+📝 End of README
