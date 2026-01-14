@@ -8,7 +8,7 @@
 | 5            | 11:20 – 12:00 | Backend integration & API setup (Whisper, ElevenLabs TTS)    | 40 min     | Audio & transcript working        |
 | 6            | 12:00 – 12:30 | Testing & bug fixes (Whisper, ElevenLabs, MediaPipe)         | 30 min     | Modules tested & stable           |
 
-🚀 Project Title
+🚀 Speak-Easy-Tools
 
 ♿ AI for Accessibility – Assistive Tools for Inclusive Education
 
