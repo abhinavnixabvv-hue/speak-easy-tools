@@ -1,73 +1,121 @@
-# Welcome to your Lovable project
+♿ AI for Accessibility – Assistive Tools for Inclusive Education
+📌 Problem Statement
 
-## Project info
+Students with disabilities—visual, auditory, and cognitive impairments—often struggle with mainstream educational tools. Most learning platforms and exam systems are not adaptive, making it difficult for these students to learn and demonstrate their knowledge independently.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+🎯 Hackathon Challenge
 
-## How can I edit this code?
+Develop AI-powered assistive tools that improve accessibility and inclusivity in education, enabling equal learning opportunities for all students.
 
-There are several ways of editing your application.
+💡 Our Solution
 
-**Use Lovable**
+We built an AI-based Accessibility Platform with three assistive modules designed to support different disabilities:
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+Voice-to-Text for Exams
 
-Changes made via Lovable will be committed automatically to this repo.
+Adaptive Learning Content for Dyslexia (powered by ElevenLabs)
 
-**Use your preferred IDE**
+Sign-Language Recognition
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+🛠 Features
+🔊 1. Voice-to-Text for Exams
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+Supports: Visually impaired students, students with motor disabilities, dysgraphia
 
-Follow these steps:
+Converts spoken answers into text during exams
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+Real-time speech recognition
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+Secure exam-friendly environment
 
-# Step 3: Install the necessary dependencies.
-npm i
+Reduces dependency on scribes
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+Technologies:
 
-**Edit a file directly in GitHub**
+Automatic Speech Recognition (ASR)
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Python-based speech models
 
-**Use GitHub Codespaces**
+📖 2. Adaptive Content for Dyslexia
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Supports: Students with dyslexia and cognitive learning difficulties
 
-## What technologies are used for this project?
+Simplifies complex educational text using AI
 
-This project is built with:
+Dyslexia-friendly fonts and layouts
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Adjustable reading speed and difficulty
 
-## How can I deploy this project?
+Text-to-Speech powered by ElevenLabs for natural, human-like audio
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+Word-by-word audio highlighting for better comprehension
 
-## Can I connect a custom domain to my Lovable project?
+Technologies:
 
-Yes, you can!
+Natural Language Processing (NLP)
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+Readability analysis
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+ElevenLabs Text-to-Speech API
+
+🤟 3. Sign-Language Recognition
+
+Supports: Hearing-impaired students
+
+Converts sign language gestures into readable text
+
+Real-time hand and gesture tracking
+
+Enables easier classroom communication
+
+Expandable to regional sign languages
+
+Technologies:
+
+Computer Vision
+
+MediaPipe, OpenCV
+
+Deep Learning (CNN / LSTM)
+
+🧩 System Architecture
+User Input (Voice / Text / Sign)
+            ↓
+      AI Processing Layer
+            ↓
+Accessible Output
+(Text / Speech / Simplified Content)
+
+🌍 Impact
+
+Makes education more inclusive
+
+Enhances independent learning
+
+Reduces accessibility barriers in exams
+
+Supports differently-abled students with dignity
+
+🚀 Future Scope
+
+Multilingual voice support using ElevenLabs
+
+Offline accessibility mode
+
+Animated sign-language avatars
+
+Integration with school and college LMS platforms
+
+🏆 Hackathon Relevance
+
+Addresses a real-world accessibility problem
+
+Uses AI responsibly for social good
+
+Modular and scalable solution
+
+Strong fit for education and inclusion-focused hackathons
+
+👨‍💻 Team & Acknowledgements
+
+Developed as part of an AI for Accessibility Hackathon Challenge, leveraging modern AI tools including ElevenLabs to create inclusive learning experiences.
