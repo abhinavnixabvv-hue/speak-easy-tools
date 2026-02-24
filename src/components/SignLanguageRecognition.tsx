@@ -1,31 +1,70 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Camera, CameraOff, Info, Hand } from "lucide-react";
+import { ArrowLeft, Camera, CameraOff, Info, Hand, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { useHandLandmarker } from "@/hooks/useHandLandmarker";
+import { classifyGesture } from "@/lib/gestureClassifier";
+import { HandLandmarkCanvas } from "@/components/HandLandmarkCanvas";
+import type { NormalizedLandmark } from "@mediapipe/tasks-vision";
 
 interface SignLanguageRecognitionProps {
   onBack: () => void;
 }
 
 const commonSigns = [
-  { sign: "Hello", description: "Wave your open hand" },
-  { sign: "Thank You", description: "Touch chin and move hand forward" },
-  { sign: "Please", description: "Circular motion on chest with open palm" },
-  { sign: "Yes", description: "Fist nodding up and down" },
-  { sign: "No", description: "Index and middle finger together, snap to thumb" },
-  { sign: "Help", description: "Fist on open palm, lift both up" },
+  { sign: "Hello", description: "Wave your open hand (all fingers extended)" },
+  { sign: "Yes", description: "Thumbs up (thumb up, fingers closed)" },
+  { sign: "No", description: "Closed fist (all fingers closed)" },
+  { sign: "Peace", description: "Index + middle finger up, rest closed" },
+  { sign: "One", description: "Only index finger pointing up" },
+  { sign: "I Love You", description: "Thumb + pinky extended, rest closed" },
+  { sign: "Call Me", description: "Thumb + pinky extended like a phone" },
 ];
 
 export function SignLanguageRecognition({ onBack }: SignLanguageRecognitionProps) {
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [detectedSign, setDetectedSign] = useState<string | null>(null);
+  const [currentLandmarks, setCurrentLandmarks] = useState<NormalizedLandmark[][]>([]);
+  const [detectionLog, setDetectionLog] = useState<string[]>([]);
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
+  const animFrameRef = useRef<number>(0);
+
+  const { initModel, detect, isModelLoading, isModelReady } = useHandLandmarker();
+
+  const runDetectionLoop = useCallback(() => {
+    const video = videoRef.current;
+    if (!video || !streamRef.current) return;
+
+    const result = detect(video);
+    if (result && result.landmarks.length > 0) {
+      setCurrentLandmarks(result.landmarks);
+
+      // Classify the first detected hand
+      const gesture = classifyGesture(result.landmarks[0]);
+      if (gesture) {
+        setDetectedSign(gesture);
+        setDetectionLog((prev) => {
+          const updated = [`${gesture} — ${new Date().toLocaleTimeString()}`, ...prev];
+          return updated.slice(0, 10); // keep last 10
+        });
+      } else {
+        setDetectedSign(null);
+      }
+    } else {
+      setCurrentLandmarks([]);
+      setDetectedSign(null);
+    }
+
+    animFrameRef.current = requestAnimationFrame(runDetectionLoop);
+  }, [detect]);
 
   const startCamera = async () => {
     try {
+      // Init model first (loads in parallel with camera prompt)
+      await initModel();
+
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: "user", width: 640, height: 480 },
       });
@@ -36,16 +75,24 @@ export function SignLanguageRecognition({ onBack }: SignLanguageRecognitionProps
       }
       setIsCameraActive(true);
       setHasPermission(true);
-
-      // Simulate sign detection (in production, this would use ML model)
-      simulateDetection();
     } catch (error) {
       console.error("Camera access denied:", error);
       setHasPermission(false);
     }
   };
 
+  // Start detection loop once camera is active and model ready
+  useEffect(() => {
+    if (isCameraActive && isModelReady) {
+      animFrameRef.current = requestAnimationFrame(runDetectionLoop);
+    }
+    return () => {
+      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+    };
+  }, [isCameraActive, isModelReady, runDetectionLoop]);
+
   const stopCamera = () => {
+    if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
     if (streamRef.current) {
       streamRef.current.getTracks().forEach((track) => track.stop());
       streamRef.current = null;
@@ -55,23 +102,7 @@ export function SignLanguageRecognition({ onBack }: SignLanguageRecognitionProps
     }
     setIsCameraActive(false);
     setDetectedSign(null);
-  };
-
-  const simulateDetection = () => {
-    // Simulate random sign detection for demo purposes
-    const detectInterval = setInterval(() => {
-      if (!streamRef.current) {
-        clearInterval(detectInterval);
-        return;
-      }
-      
-      // Randomly detect a sign (20% chance every 2 seconds)
-      if (Math.random() > 0.8) {
-        const randomSign = commonSigns[Math.floor(Math.random() * commonSigns.length)];
-        setDetectedSign(randomSign.sign);
-        setTimeout(() => setDetectedSign(null), 2000);
-      }
-    }, 2000);
+    setCurrentLandmarks([]);
   };
 
   useEffect(() => {
@@ -95,7 +126,7 @@ export function SignLanguageRecognition({ onBack }: SignLanguageRecognitionProps
           </Button>
           <div>
             <h1 className="text-2xl font-bold text-foreground">Sign Language Recognition</h1>
-            <p className="text-muted-foreground">Real-time ASL translation using AI</p>
+            <p className="text-muted-foreground">Real-time hand detection powered by MediaPipe</p>
           </div>
         </div>
 
@@ -112,7 +143,12 @@ export function SignLanguageRecognition({ onBack }: SignLanguageRecognitionProps
                     muted
                     className="h-full w-full object-cover"
                   />
-                  
+                  <HandLandmarkCanvas
+                    landmarks={currentLandmarks}
+                    width={640}
+                    height={480}
+                  />
+
                   {/* Detection overlay */}
                   <AnimatePresence>
                     {detectedSign && (
@@ -135,14 +171,25 @@ export function SignLanguageRecognition({ onBack }: SignLanguageRecognitionProps
                 </>
               ) : (
                 <div className="flex h-full flex-col items-center justify-center gap-4 p-8">
-                  <div className="rounded-full bg-muted-foreground/10 p-6">
-                    <Camera className="h-12 w-12 text-muted-foreground" />
-                  </div>
-                  <p className="text-center text-muted-foreground">
-                    {hasPermission === false
-                      ? "Camera access was denied. Please enable it in your browser settings."
-                      : "Enable your camera to start sign language recognition"}
-                  </p>
+                  {isModelLoading ? (
+                    <>
+                      <Loader2 className="h-12 w-12 animate-spin text-primary" />
+                      <p className="text-center text-muted-foreground">
+                        Loading AI model...
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <div className="rounded-full bg-muted-foreground/10 p-6">
+                        <Camera className="h-12 w-12 text-muted-foreground" />
+                      </div>
+                      <p className="text-center text-muted-foreground">
+                        {hasPermission === false
+                          ? "Camera access was denied. Please enable it in your browser settings."
+                          : "Enable your camera to start sign language recognition"}
+                      </p>
+                    </>
+                  )}
                 </div>
               )}
             </div>
@@ -154,8 +201,14 @@ export function SignLanguageRecognition({ onBack }: SignLanguageRecognitionProps
                 size="lg"
                 onClick={isCameraActive ? stopCamera : startCamera}
                 className="gap-2"
+                disabled={isModelLoading}
               >
-                {isCameraActive ? (
+                {isModelLoading ? (
+                  <>
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                    Loading Model...
+                  </>
+                ) : isCameraActive ? (
                   <>
                     <CameraOff className="h-5 w-5" />
                     Stop Camera
@@ -178,15 +231,19 @@ export function SignLanguageRecognition({ onBack }: SignLanguageRecognitionProps
                 <Hand className="h-5 w-5 text-primary" />
                 Recognition Log
               </h2>
-              <div className="min-h-[120px] rounded-xl bg-muted p-4">
-                {detectedSign ? (
-                  <p className="text-foreground">
-                    Detected: <strong>{detectedSign}</strong>
-                  </p>
+              <div className="min-h-[120px] max-h-[200px] overflow-y-auto rounded-xl bg-muted p-4">
+                {detectionLog.length > 0 ? (
+                  <ul className="space-y-1 text-sm">
+                    {detectionLog.map((entry, i) => (
+                      <li key={i} className="text-foreground">
+                        {entry}
+                      </li>
+                    ))}
+                  </ul>
                 ) : (
                   <p className="text-muted-foreground">
                     {isCameraActive
-                      ? "Waiting for signs..."
+                      ? "Show a hand gesture to the camera..."
                       : "Start the camera to begin recognition"}
                   </p>
                 )}
@@ -197,7 +254,7 @@ export function SignLanguageRecognition({ onBack }: SignLanguageRecognitionProps
             <div className="rounded-2xl border-2 border-border bg-card p-6 shadow-soft">
               <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-foreground">
                 <Info className="h-5 w-5 text-primary" />
-                Common Signs (ASL)
+                Supported Gestures
               </h2>
               <div className="space-y-3">
                 {commonSigns.map((item) => (
@@ -210,15 +267,6 @@ export function SignLanguageRecognition({ onBack }: SignLanguageRecognitionProps
                   </div>
                 ))}
               </div>
-            </div>
-
-            {/* Note about demo */}
-            <div className="rounded-2xl bg-accent/10 p-4">
-              <p className="text-sm text-muted-foreground">
-                <strong>Note:</strong> This is a demonstration interface. Full AI-powered sign 
-                language recognition requires connecting to a machine learning model. 
-                Currently showing simulated detections.
-              </p>
             </div>
           </div>
         </div>
