@@ -135,15 +135,15 @@ export function SignLanguageRecognition({ onBack }: SignLanguageRecognitionProps
           {/* Camera View */}
           <div className="lg:col-span-2">
             <div className="relative aspect-video overflow-hidden rounded-2xl border-2 border-border bg-muted shadow-soft">
-              {isCameraActive ? (
+              <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                muted
+                className={`h-full w-full object-cover ${isCameraActive ? '' : 'hidden'}`}
+              />
+              {isCameraActive && (
                 <>
-                  <video
-                    ref={videoRef}
-                    autoPlay
-                    playsInline
-                    muted
-                    className="h-full w-full object-cover"
-                  />
                   <HandLandmarkCanvas
                     landmarks={currentLandmarks}
                     width={640}
@@ -170,8 +170,9 @@ export function SignLanguageRecognition({ onBack }: SignLanguageRecognitionProps
                     <span className="text-sm font-medium text-foreground">Live</span>
                   </div>
                 </>
-              ) : (
-                <div className="flex h-full flex-col items-center justify-center gap-4 p-8">
+              )}
+              {!isCameraActive && (
+                <div className="absolute inset-0 flex h-full flex-col items-center justify-center gap-4 p-8">
                   {isModelLoading ? (
                     <>
                       <Loader2 className="h-12 w-12 animate-spin text-primary" />
