@@ -101,11 +101,19 @@ const Index = () => {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border bg-card px-4 py-8">
-        <div className="mx-auto max-w-5xl text-center">
+      <footer className="border-t border-border bg-card px-4 py-12">
+        <div className="mx-auto max-w-5xl text-center space-y-4">
           <p className="flex items-center justify-center gap-2 text-muted-foreground">
             Made with <Heart className="h-4 w-4 text-accent" /> for accessibility
           </p>
+          <div className="space-y-1">
+            <p className="text-sm font-medium text-foreground">
+              Created by <span className="text-primary">Abhinav N</span> & <span className="text-primary">Adhithya Bineesh</span>
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Vidya Academy of Science and Technology
+            </p>
+          </div>
         </div>
       </footer>
     </div>
