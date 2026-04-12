@@ -106,6 +106,9 @@ const Index = () => {
           <p className="flex items-center justify-center gap-2 text-muted-foreground">
             Made with <Heart className="h-4 w-4 text-accent" /> for accessibility
           </p>
+          <p className="text-sm font-medium text-foreground">
+            Created by <span className="text-primary">Abhinav N</span> & <span className="text-primary">Adithya Binesh</span>
+          </p>
           <p className="text-sm text-muted-foreground">
             Developed by Students of{" "}
             <span className="font-medium text-foreground">Vidya Academy of Science and Technology</span>
