@@ -106,12 +106,25 @@ const Index = () => {
           <p className="flex items-center justify-center gap-2 text-muted-foreground">
             Made with <Heart className="h-4 w-4 text-accent" /> for accessibility
           </p>
+          <p className="text-sm text-muted-foreground">
+            Developed by Students of{" "}
+            <span className="font-medium text-foreground">Vidya Academy of Science and Technology</span>
+          </p>
           <div className="space-y-1">
-            <p className="text-sm font-medium text-foreground">
-              Created by <span className="text-primary">Abhinav N</span> & <span className="text-primary">Adhithya Bineesh</span>
-            </p>
             <p className="text-xs text-muted-foreground">
-              Vidya Academy of Science and Technology
+              © 2026{" "}
+              <a
+                href="https://hexnicai.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-primary hover:underline"
+              >
+                HexnicAI
+              </a>
+              {" "}|| Part of ATS_PDZ
+            </p>
+            <p className="text-xs font-medium text-muted-foreground tracking-wider">
+              ALL RIGHTS RESERVED.
             </p>
           </div>
         </div>
